@@ -3,10 +3,13 @@ DROP TABLE IF EXISTS employee_role;
 DROP TABLE IF EXISTS employee;
 DROP TABLE IF EXISTS department;
 DROP TABLE IF EXISTS company;
+DROP SEQUENCE IF EXISTS global_seq;
+
+CREATE SEQUENCE global_seq START WITH 100000;
 
 CREATE TABLE IF NOT EXISTS company
 (
-    id               SERIAL PRIMARY KEY,
+    id               INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
     name             VARCHAR NOT NULL,
     physical_address VARCHAR NOT NULL,
     legal_address    VARCHAR NOT NULL,
@@ -15,7 +18,7 @@ CREATE TABLE IF NOT EXISTS company
 
 CREATE TABLE IF NOT EXISTS department
 (
-    id         SERIAL PRIMARY KEY,
+    id         INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
     name       VARCHAR                         NOT NULL,
     contact    VARCHAR                         NOT NULL,
     head       VARCHAR                         NOT NULL,
@@ -24,7 +27,7 @@ CREATE TABLE IF NOT EXISTS department
 
 CREATE TABLE IF NOT EXISTS employee
 (
-    id            SERIAL PRIMARY KEY,
+    id            INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
     last_name     VARCHAR                            NOT NULL,
     first_name    VARCHAR                            NOT NULL,
     patronymic    VARCHAR,
@@ -42,7 +45,7 @@ CREATE TABLE IF NOT EXISTS employee_role
 
 CREATE TABLE IF NOT EXISTS task
 (
-    id           SERIAL PRIMARY KEY,
+    id           INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
     title        VARCHAR                         NOT NULL,
     author_id    BIGINT REFERENCES employee (id) NOT NULL,
     performer_id BIGINT REFERENCES employee (id),

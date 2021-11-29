@@ -19,6 +19,7 @@
     </jdbc:initialize-database>
 
     <tx:annotation-driven/>
+
     <bean class="org.springframework.beans.factory.config.MethodInvokingBean">
         <property name="staticMethod" value="org.slf4j.bridge.SLF4JBridgeHandler.install" />
     </bean>
@@ -39,6 +40,7 @@
                 <entry key="#{T(org.hibernate.cfg.AvailableSettings).FORMAT_SQL}" value="${hibernate.format_sql}"/>
                 <entry key="#{T(org.hibernate.cfg.AvailableSettings).USE_SQL_COMMENTS}" value="${hibernate.use_sql_comments}"/>
                 <entry key="#{T(org.hibernate.cfg.AvailableSettings).JPA_PROXY_COMPLIANCE}" value="false"/>
+                <entry key="#{T(org.hibernate.cfg.AvailableSettings).PHYSICAL_NAMING_STRATEGY}" value="org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy"/>
             </map>
         </property>
 
