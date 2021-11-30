@@ -44,13 +44,6 @@ public class Company extends BaseEntity {
     @ToString.Exclude
     private List<Employee> employees;
 
-    public Company(String name, String physicalAddress, String legalAddress, String head) {
-        this.name = name;
-        this.physicalAddress = physicalAddress;
-        this.legalAddress = legalAddress;
-        this.head = head;
-    }
-
     public Company(Integer id, String name, String physicalAddress, String legalAddress, String head) {
         super(id);
         this.name = name;

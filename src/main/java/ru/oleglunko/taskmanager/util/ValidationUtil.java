@@ -16,7 +16,7 @@ public class ValidationUtil {
     }
 
     public static void checkNotFoundWithId(boolean found, int id) {
-        checkNotFound(found, "id=" + id);
+        checkNotFound(found, "id = " + id);
     }
 
     public static <T> T checkNotFoundWithEmployeeId(T object, int employeeId) {
@@ -25,7 +25,7 @@ public class ValidationUtil {
     }
 
     public static void checkNotFoundWithEmployeeId(boolean found, int employeeId) {
-        checkNotFound(found, "employee id=" + employeeId);
+        checkNotFound(found, "employee id = " + employeeId);
     }
 
     public static <T> T checkNotFound(T object, String msg) {

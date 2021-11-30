@@ -28,12 +28,12 @@ CREATE TABLE IF NOT EXISTS department
 CREATE TABLE IF NOT EXISTS employee
 (
     id            INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
-    last_name     VARCHAR                            NOT NULL,
-    first_name    VARCHAR                            NOT NULL,
+    last_name     VARCHAR                                              NOT NULL,
+    first_name    VARCHAR                                              NOT NULL,
     patronymic    VARCHAR,
-    position      VARCHAR                            NOT NULL,
-    company_id    INTEGER REFERENCES company (id)    NOT NULL,
-    department_id INTEGER REFERENCES department (id) NOT NULL
+    position      VARCHAR                                              NOT NULL,
+    company_id    INTEGER REFERENCES company (id) ON DELETE CASCADE    NOT NULL,
+    department_id INTEGER REFERENCES department (id) ON DELETE CASCADE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS employee_role
@@ -46,11 +46,11 @@ CREATE TABLE IF NOT EXISTS employee_role
 CREATE TABLE IF NOT EXISTS task
 (
     id           INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
-    title        VARCHAR                         NOT NULL,
-    author_id    BIGINT REFERENCES employee (id) NOT NULL,
-    performer_id BIGINT REFERENCES employee (id),
-    deadline     TIMESTAMP                       NOT NULL,
-    description  VARCHAR                         NOT NULL
+    title        VARCHAR                                           NOT NULL,
+    author_id    BIGINT REFERENCES employee (id) ON DELETE CASCADE NOT NULL,
+    performer_id BIGINT REFERENCES employee (id) ON DELETE CASCADE,
+    deadline     TIMESTAMP                                         NOT NULL,
+    description  VARCHAR                                           NOT NULL
 )
 
 

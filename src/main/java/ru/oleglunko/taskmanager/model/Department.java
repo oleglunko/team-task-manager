@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
@@ -34,8 +35,9 @@ public class Department extends BaseEntity {
     @NotBlank
     private String head;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
+    @ToString.Exclude
     private Company company;
 
     @OneToMany(mappedBy = "department")

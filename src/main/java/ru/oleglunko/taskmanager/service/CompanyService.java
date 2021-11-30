@@ -7,25 +7,19 @@ import ru.oleglunko.taskmanager.model.Company;
 import ru.oleglunko.taskmanager.repository.CompanyRepository;
 import ru.oleglunko.taskmanager.util.exception.IllegalArgumentException;
 
-import static ru.oleglunko.taskmanager.util.ValidationUtil.checkNotFoundWithEmployeeId;
-import static ru.oleglunko.taskmanager.util.ValidationUtil.checkNotFoundWithId;
-
 @Service
 public class CompanyService {
 
-    private CompanyRepository repository;
+    private final CompanyRepository repository;
 
     public CompanyService(CompanyRepository repository) {
         this.repository = repository;
     }
 
-    public Company get(int id) {
-        return checkNotFoundWithId(repository.findById(id).orElse(null), id);
-
-    }
-
-    public Company getByEmployeeId(int employeeId) {
-        return checkNotFoundWithEmployeeId(repository.findByEmployeesId(employeeId), employeeId);
+    public Company get() {
+        return repository.findAll().stream()
+                .findFirst()
+                .orElse(null);
     }
 
     @Transactional
