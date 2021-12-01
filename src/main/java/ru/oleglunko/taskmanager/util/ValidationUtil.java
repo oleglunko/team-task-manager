@@ -19,14 +19,6 @@ public class ValidationUtil {
         checkNotFound(found, "id = " + id);
     }
 
-    public static <T> T checkNotFoundWithEmployeeId(T object, int employeeId) {
-        checkNotFoundWithEmployeeId(object != null, employeeId);
-        return object;
-    }
-
-    public static void checkNotFoundWithEmployeeId(boolean found, int employeeId) {
-        checkNotFound(found, "employee id = " + employeeId);
-    }
 
     public static <T> T checkNotFound(T object, String msg) {
         checkNotFound(object != null, msg);

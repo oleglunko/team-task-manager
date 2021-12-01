@@ -8,6 +8,7 @@ import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -26,12 +27,14 @@ public class Task extends BaseEntity {
     @NotBlank
     private String title;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
+    @ToString.Exclude
     private Employee author;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
+    @ToString.Exclude
     private Employee performer;
 
     @NotNull
@@ -41,10 +44,16 @@ public class Task extends BaseEntity {
     @NotNull
     private String description;
 
-    public Task(Integer id, String title, LocalDateTime deadline, String description) {
+    private boolean performed;
+
+    private boolean accepted;
+
+    public Task(Integer id, String title, LocalDateTime deadline, String description, boolean performed, boolean accepted) {
         super(id);
         this.title = title;
         this.deadline = deadline;
         this.description = description;
+        this.performed = performed;
+        this.accepted = accepted;
     }
 }

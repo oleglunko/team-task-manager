@@ -50,7 +50,9 @@ CREATE TABLE IF NOT EXISTS task
     author_id    BIGINT REFERENCES employee (id) ON DELETE CASCADE NOT NULL,
     performer_id BIGINT REFERENCES employee (id) ON DELETE CASCADE,
     deadline     TIMESTAMP                                         NOT NULL,
-    description  VARCHAR                                           NOT NULL
+    description  VARCHAR                                           NOT NULL,
+    performed    BOOLEAN                                           NOT NULL,
+    accepted     BOOLEAN                                           NOT NULL
 )
 
 
