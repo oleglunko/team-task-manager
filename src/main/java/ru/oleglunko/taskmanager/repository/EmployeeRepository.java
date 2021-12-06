@@ -20,4 +20,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @Modifying
     @Query("DELETE FROM Employee e WHERE e.id = ?1")
     int delete(int id);
+
+    Employee getByLogin(String login);
 }

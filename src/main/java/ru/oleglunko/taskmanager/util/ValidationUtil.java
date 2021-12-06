@@ -3,9 +3,9 @@ package ru.oleglunko.taskmanager.util;
 import lombok.experimental.UtilityClass;
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.lang.NonNull;
+import ru.oleglunko.taskmanager.HasId;
+import ru.oleglunko.taskmanager.util.exception.IllegalRequestDataException;
 import ru.oleglunko.taskmanager.util.exception.NotFoundException;
-
-import java.util.List;
 
 @UtilityClass
 public class ValidationUtil {
@@ -19,19 +19,26 @@ public class ValidationUtil {
         checkNotFound(found, "id = " + id);
     }
 
-
-    public static <T> T checkNotFound(T object, String msg) {
-        checkNotFound(object != null, msg);
-        return object;
-    }
-
     public static void checkNotFound(boolean found, String msg) {
         if (!found) {
             throw new NotFoundException("Not found entity with " + msg);
         }
     }
 
-    //  https://stackoverflow.com/a/65442410/548473
+    public static void checkNew(HasId bean) {
+        if (!bean.isNew()) {
+            throw new IllegalRequestDataException(bean + " must be new (id=null)");
+        }
+    }
+
+    public static void assureIdConsistent(HasId bean, int id) {
+        if (bean.isNew()) {
+            bean.setId(id);
+        } else if (bean.getId() != id) {
+            throw new IllegalRequestDataException(bean + " must be with id=" + id);
+        }
+    }
+
     @NonNull
     public static Throwable getRootCause(@NonNull Throwable t) {
         Throwable rootCause = NestedExceptionUtils.getRootCause(t);

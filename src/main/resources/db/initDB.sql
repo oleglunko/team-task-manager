@@ -31,6 +31,9 @@ CREATE TABLE IF NOT EXISTS employee
     last_name     VARCHAR                                              NOT NULL,
     first_name    VARCHAR                                              NOT NULL,
     patronymic    VARCHAR,
+    login         VARCHAR                                              NOT NULL,
+    password      VARCHAR                                              NOT NULL,
+    enabled       BOOLEAN             DEFAULT TRUE                     NOT NULL,
     position      VARCHAR                                              NOT NULL,
     company_id    INTEGER REFERENCES company (id) ON DELETE CASCADE    NOT NULL,
     department_id INTEGER REFERENCES department (id) ON DELETE CASCADE NOT NULL

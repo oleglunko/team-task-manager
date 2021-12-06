@@ -1,10 +1,12 @@
 package ru.oleglunko.taskmanager.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import ru.oleglunko.taskmanager.View;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,6 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)
+@JsonIgnoreProperties({"company", "employees"})
 @Entity
 public class Department extends BaseEntity {
 
@@ -36,7 +39,7 @@ public class Department extends BaseEntity {
     private String head;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull
+    @NotNull(groups = View.Persist.class)
     @ToString.Exclude
     private Company company;
 
