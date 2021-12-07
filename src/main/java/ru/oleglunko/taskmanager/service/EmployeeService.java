@@ -1,6 +1,5 @@
 package ru.oleglunko.taskmanager.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +15,7 @@ import ru.oleglunko.taskmanager.repository.EmployeeRepository;
 
 import java.util.List;
 
+import static ru.oleglunko.taskmanager.util.EmployeeUtil.prepareToSave;
 import static ru.oleglunko.taskmanager.util.ValidationUtil.checkNotFoundWithId;
 
 //TODO refactoring
@@ -40,15 +40,16 @@ public class EmployeeService implements UserDetailsService {
         Assert.notNull(employee, "Employee must not be null");
         employee.setCompany(companyService.get());
         employee.setDepartment(departmentService.get(departmentId));
-        return repository.save(employee);
+        return prepareAndSave(employee);
     }
 
     @Transactional
     public void update(Employee employee, int departmentId) {
         Assert.notNull(employee, "Employee must not be null");
+        get(employee.getId());
         employee.setCompany(companyService.get());
         employee.setDepartment(departmentService.get(departmentId));
-        checkNotFoundWithId(repository.save(employee), employee.getId());
+        prepareAndSave(employee);
     }
 
     @Transactional
@@ -68,12 +69,22 @@ public class EmployeeService implements UserDetailsService {
         return repository.findAllByDepartmentIdOrderByLastName(departmentId);
     }
 
+    @Transactional
+    public void enable(int id, boolean enabled) {
+        Employee employee = get(id);
+        employee.setEnabled(enabled);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        Employee employee = repository.getByLogin(login);
+        Employee employee = repository.getByLogin(login.toLowerCase());
         if (employee == null) {
             throw new UsernameNotFoundException("Employee " + login + " is not found");
         }
         return new AuthorizedEmployee(employee);
+    }
+
+    private Employee prepareAndSave(Employee employee) {
+        return repository.save(prepareToSave(employee, passwordEncoder));
     }
 }

@@ -1,5 +1,6 @@
 package ru.oleglunko.taskmanager.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.BatchSize;
 import org.springframework.util.CollectionUtils;
+import ru.oleglunko.taskmanager.View;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -32,6 +34,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)
+@JsonIgnoreProperties({"company", "createdTasks", "performingTasks"})
 @Entity
 public class Employee extends BaseEntity {
 
@@ -63,11 +66,11 @@ public class Employee extends BaseEntity {
     private String position;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull
+    @NotNull(groups = View.Persist.class)
     @ToString.Exclude
     private Company company;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @NotNull
     @ToString.Exclude
     private Department department;

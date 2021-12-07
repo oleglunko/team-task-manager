@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS employee
     last_name     VARCHAR                                              NOT NULL,
     first_name    VARCHAR                                              NOT NULL,
     patronymic    VARCHAR,
-    login         VARCHAR                                              NOT NULL,
+    login         VARCHAR UNIQUE                                       NOT NULL,
     password      VARCHAR                                              NOT NULL,
     enabled       BOOLEAN             DEFAULT TRUE                     NOT NULL,
     position      VARCHAR                                              NOT NULL,

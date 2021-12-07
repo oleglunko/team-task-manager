@@ -4,47 +4,44 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ru.oleglunko.taskmanager.View;
-import ru.oleglunko.taskmanager.model.Department;
-import ru.oleglunko.taskmanager.service.DepartmentService;
+import ru.oleglunko.taskmanager.model.Employee;
+import ru.oleglunko.taskmanager.service.EmployeeService;
 
 import javax.validation.Valid;
-
 import java.net.URI;
 
-import static ru.oleglunko.taskmanager.util.ValidationUtil.assureIdConsistent;
 import static ru.oleglunko.taskmanager.util.ValidationUtil.checkNew;
 
 @Slf4j
-@Validated
 @RestController
-@RequestMapping(value = AdminDepartmentController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
-public class AdminDepartmentController {
+@RequestMapping(value = AdminEmployeeController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+public class AdminEmployeeController {
 
-    static final String REST_URL = "/rest/admin/departments";
+    static final String REST_URL = "/rest/admin/employees";
 
-    private final DepartmentService service;
+    private final EmployeeService service;
 
-    public AdminDepartmentController(DepartmentService service) {
+    public AdminEmployeeController(EmployeeService service) {
         this.service = service;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Department> create(@Valid @RequestBody Department department) {
-        int employeeId = SecurityUtil.authEmployeeId();
-        log.info("create department {} by admin {}", department, employeeId);
-        checkNew(department);
-        Department created = service.create(department);
+    public ResponseEntity<Employee> create(@Valid @RequestBody Employee employee) {
+        int adminId = SecurityUtil.authEmployeeId();
+        log.info("create employee {} by admin {}", employee, adminId);
+        checkNew(employee);
+        Employee created = service.create(employee, employee.getDepartment().getId());
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
@@ -55,18 +52,25 @@ public class AdminDepartmentController {
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@Valid @RequestBody Department department, @PathVariable int id) {
-        int employeeId = SecurityUtil.authEmployeeId();
-        log.info("update department {} by admin {}", id, employeeId);
-        assureIdConsistent(department, id);
-        service.update(department);
+    public void update(@Valid @RequestBody Employee employee) {
+        int adminId = SecurityUtil.authEmployeeId();
+        log.info("update employee {} by admin {}", employee, adminId);
+        service.update(employee, employee.getDepartment().getId());
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
-        int employeeId = SecurityUtil.authEmployeeId();
-        log.info("delete department {} by admin {}", id, employeeId);
+        int adminId = SecurityUtil.authEmployeeId();
+        log.info("delete {} by admin {}", id, adminId);
         service.delete(id);
+    }
+
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void enable(@PathVariable int id, @RequestParam boolean enabled) {
+        int adminId = SecurityUtil.authEmployeeId();
+        log.info(enabled ? "enable {} by admin {}" : "disable {} by admin {}", id, adminId);
+        service.enable(id, enabled);
     }
 }

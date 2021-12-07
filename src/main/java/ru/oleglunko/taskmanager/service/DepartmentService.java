@@ -40,8 +40,9 @@ public class DepartmentService {
     @Transactional
     public void update(Department department) {
         Assert.notNull(department, "Department must not be null");
+        get(department.getId());
         department.setCompany(companyService.get());
-        checkNotFoundWithId(repository.save(department), department.getId());
+        repository.save(department);
     }
 
     @Transactional
