@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping(value = DepartmentEmployeeController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class DepartmentEmployeeController {
 
-    static final String REST_URL = "/rest/departments/{departmentId}/emloyees";
+    static final String REST_URL = "/rest/departments/{departmentId}/employees";
 
     private final EmployeeService service;
 

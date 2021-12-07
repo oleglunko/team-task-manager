@@ -41,7 +41,8 @@ public class AdminEmployeeController {
         int adminId = SecurityUtil.authEmployeeId();
         log.info("create employee {} by admin {}", employee, adminId);
         checkNew(employee);
-        Employee created = service.create(employee, employee.getDepartment().getId());
+        int departmentId = employee.getDepartment().getId();
+        Employee created = service.create(employee, departmentId);
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
@@ -55,7 +56,8 @@ public class AdminEmployeeController {
     public void update(@Valid @RequestBody Employee employee) {
         int adminId = SecurityUtil.authEmployeeId();
         log.info("update employee {} by admin {}", employee, adminId);
-        service.update(employee, employee.getDepartment().getId());
+        int departmentId = employee.getDepartment().getId();
+        service.update(employee, departmentId);
     }
 
     @DeleteMapping("/{id}")

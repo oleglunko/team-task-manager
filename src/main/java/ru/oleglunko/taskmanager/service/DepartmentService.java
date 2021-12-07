@@ -33,20 +33,23 @@ public class DepartmentService {
     @Transactional
     public Department create(Department department) {
         Assert.notNull(department, "Department must not be null");
-        department.setCompany(companyService.get());
-        return repository.save(department);
+        return prepareAndSave(department);
     }
 
     @Transactional
     public void update(Department department) {
         Assert.notNull(department, "Department must not be null");
         get(department.getId());
-        department.setCompany(companyService.get());
-        repository.save(department);
+        prepareAndSave(department);
     }
 
     @Transactional
     public void delete(int id) {
         checkNotFoundWithId(repository.delete(id) != 0, id);
+    }
+
+    private Department prepareAndSave(Department department) {
+        department.setCompany(companyService.get());
+        return repository.save(department);
     }
 }

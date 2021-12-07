@@ -38,18 +38,14 @@ public class EmployeeService implements UserDetailsService {
     @Transactional
     public Employee create(Employee employee, int departmentId) {
         Assert.notNull(employee, "Employee must not be null");
-        employee.setCompany(companyService.get());
-        employee.setDepartment(departmentService.get(departmentId));
-        return prepareAndSave(employee);
+        return prepareAndSave(employee, departmentId);
     }
 
     @Transactional
     public void update(Employee employee, int departmentId) {
         Assert.notNull(employee, "Employee must not be null");
         get(employee.getId());
-        employee.setCompany(companyService.get());
-        employee.setDepartment(departmentService.get(departmentId));
-        prepareAndSave(employee);
+        prepareAndSave(employee, departmentId);
     }
 
     @Transactional
@@ -84,7 +80,9 @@ public class EmployeeService implements UserDetailsService {
         return new AuthorizedEmployee(employee);
     }
 
-    private Employee prepareAndSave(Employee employee) {
+    private Employee prepareAndSave(Employee employee, int departmentId) {
+        employee.setCompany(companyService.get());
+        employee.setDepartment(departmentService.get(departmentId));
         return repository.save(prepareToSave(employee, passwordEncoder));
     }
 }
