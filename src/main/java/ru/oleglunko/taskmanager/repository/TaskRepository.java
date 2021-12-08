@@ -15,6 +15,9 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     @Query("SELECT t FROM Task t WHERE t.author.id IN (SELECT e.id FROM Employee e LEFT JOIN Department d ON e.department.id = d.id WHERE d.id = ?1) ORDER BY t.deadline")
     List<Task> findAllInDepartment(int departmentId);
 
+    @Query("SELECT t FROM Task t WHERE t.performer.id = ?1")
+    List<Task> findAllForPerformer(int empployeeId);
+
     @Modifying
     @Query("DELETE FROM Task t WHERE t.id = :id AND t.author.id = :employeeId")
     int delete(@Param("id") int id, @Param("employeeId") int employeeId);

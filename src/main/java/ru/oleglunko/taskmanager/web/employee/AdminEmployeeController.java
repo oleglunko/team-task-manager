@@ -1,4 +1,4 @@
-package ru.oleglunko.taskmanager.web;
+package ru.oleglunko.taskmanager.web.employee;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.oleglunko.taskmanager.model.Employee;
 import ru.oleglunko.taskmanager.service.EmployeeService;
+import ru.oleglunko.taskmanager.web.SecurityUtil;
 
 import javax.validation.Valid;
 import java.net.URI;

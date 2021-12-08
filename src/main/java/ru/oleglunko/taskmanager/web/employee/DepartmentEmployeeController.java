@@ -1,4 +1,4 @@
-package ru.oleglunko.taskmanager.web;
+package ru.oleglunko.taskmanager.web.employee;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -13,26 +13,20 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping(value = EmployeeController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
-public class EmployeeController {
+@RequestMapping(value = DepartmentEmployeeController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+public class DepartmentEmployeeController {
 
-    static final String REST_URL = "/rest/employees";
+    static final String REST_URL = "/rest/departments/{departmentId}/employees";
 
     private final EmployeeService service;
 
-    public EmployeeController(EmployeeService service) {
+    public DepartmentEmployeeController(EmployeeService service) {
         this.service = service;
     }
 
     @GetMapping
-    public List<Employee> getAll() {
-        log.info("get all employees");
-        return service.getAll();
-    }
-
-    @GetMapping("/{id}")
-    public Employee get(@PathVariable int id) {
-        log.info("get employee {}", id);
-        return service.get(id);
+    public List<Employee> getAllInDepartment(@PathVariable int departmentId) {
+        log.info("get all employees in the department {}", departmentId);
+        return service.getAllByDepartmentId(departmentId);
     }
 }

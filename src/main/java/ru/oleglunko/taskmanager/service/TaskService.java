@@ -24,8 +24,8 @@ public class TaskService {
     }
 
     @Transactional
-    public Task getForEmployee(int id, int employeeId) {
-        Task task = checkNotFoundWithId(repository.findById(id).orElse(null), id);
+    public Task getInEmployeesDepartment(int id, int employeeId) {
+        Task task = getById(id);
         Integer taskDepartmentId = task.getAuthor().getDepartment().getId();
         Integer employeesDepartmentId = employeeService.get(employeeId).getDepartment().getId();
         if (!taskDepartmentId.equals(employeesDepartmentId)) {
@@ -34,10 +34,19 @@ public class TaskService {
         return task;
     }
 
+    public Task getById(int id) {
+        return checkNotFoundWithId(repository.findById(id).orElse(null), id);
+    }
+
     @Transactional
-    public List<Task> getAllForEmployee(int employeeId) {
+    public List<Task> getAllInEmployeesDepartment(int employeeId) {
         Integer departmentId = employeeService.get(employeeId).getDepartment().getId();
         return repository.findAllInDepartment(departmentId);
+    }
+
+    @Transactional
+    public List<Task> getAllForPerformer(int employeeId) {
+        return repository.findAllForPerformer(employeeId);
     }
 
     @Transactional
@@ -73,35 +82,21 @@ public class TaskService {
         Task performedTask = getById(id);
         if (performedTask.getPerformer().getId() == employeeId) {
             performedTask.setPerformed(true);
-            repository.save(performedTask);
         } else {
             throw new UnsupportedOperationException("You cannot perform this operation");
         }
     }
 
     @Transactional
-    public void accept(int id, int employeeId) {
+    public void acceptOrDecline(int id, int employeeId, boolean accepted) {
         Task performedTask = getById(id);
-        if (performedTask.getAuthor().getId() == employeeId && performedTask.isPerformed()) {
+        if (performedTask.getAuthor().getId() != employeeId || !performedTask.isPerformed()) {
+            throw new UnsupportedOperationException("You cannot perform this operation");
+        } else if (accepted){
             performedTask.setAccepted(true);
-            repository.save(performedTask);
         } else {
-            throw new UnsupportedOperationException("You cannot perform this operation");
-        }
-    }
-
-    @Transactional
-    public void decline(int id, int employeeId) {
-        Task performedTask = getById(id);
-        if (performedTask.getAuthor().getId() == employeeId && performedTask.isPerformed()) {
+            performedTask.setAccepted(false);
             performedTask.setPerformed(false);
-            repository.save(performedTask);
-        } else {
-            throw new UnsupportedOperationException("You cannot perform this operation");
         }
-    }
-
-    public Task getById(int id) {
-        return checkNotFoundWithId(repository.findById(id).orElse(null), id);
     }
 }

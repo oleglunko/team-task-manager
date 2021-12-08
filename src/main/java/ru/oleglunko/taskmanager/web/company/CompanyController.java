@@ -1,4 +1,4 @@
-package ru.oleglunko.taskmanager.web;
+package ru.oleglunko.taskmanager.web.company;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.oleglunko.taskmanager.model.Company;
 import ru.oleglunko.taskmanager.service.CompanyService;
+import ru.oleglunko.taskmanager.web.SecurityUtil;
 
 @Slf4j
 @RestController

@@ -1,4 +1,4 @@
-package ru.oleglunko.taskmanager;
+package ru.oleglunko.taskmanager.model;
 
 public interface HasId {
 
